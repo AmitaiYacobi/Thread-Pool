@@ -84,11 +84,11 @@ void tpDestroy(ThreadPool* threadPool, int shouldWaitForTasks) {
     else if (!shouldWaitForTasks) {
         threadPool->stop = 1;
         waitForThreads(threadPool);
-    }
-    /*Free all tasks in the queue*/
-    while (!osIsQueueEmpty(threadPool->tasksQueue)) {
-        Task* task = osDequeue(threadPool->tasksQueue);
-        free(task);
+        /*Free all tasks in the queue*/
+        while (!osIsQueueEmpty(threadPool->tasksQueue)) {
+            Task* task = osDequeue(threadPool->tasksQueue);
+            if (task != NULL) free(task);
+        }
     }
     osDestroyQueue(threadPool->tasksQueue);
     free(threadPool->threads);
